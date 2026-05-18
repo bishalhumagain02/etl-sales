@@ -1,12 +1,9 @@
 import pandas as pd
 
 def extract(filepath: str) -> pd.DataFrame:
-    """
-    EXTRACT: Read raw CSV from disk.
-    Handles encoding issues common with the Kaggle Superstore file.
-    """
+    
     print("=" * 50)
-    print(" EXTRACT PIPELINE")
+    print(" EXTRACT PHASE")
     print("=" * 50)
 
     df = pd.read_csv(filepath, encoding="latin-1")  # Superstore CSV uses latin-1
