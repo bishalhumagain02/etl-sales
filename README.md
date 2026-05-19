@@ -1,64 +1,75 @@
-# Retail Sales ETL Pipeline
 
-## Overview
-This project demonstrates a complete ETL (Extract, Transform, Load) pipeline using Python, pandas, SQLite, and data visualization techniques.
 
-The pipeline processes retail sales data from the Superstore dataset, performs cleaning and transformation, loads the processed data into a SQLite database, and generates business insights through analysis and charts.
+A data engineering project that builds a complete ETL pipeline
+using Python, Pandas and MySQL on the Kaggle Superstore dataset.
 
----
+# Setup
 
-## Features
-
-- Extract data from CSV
-- Remove duplicates and missing values
-- Convert date columns
-- Create new calculated features
-- Load cleaned data into SQLite database
-- Generate sales analysis by category
-- Visualize results using matplotlib
-
----
-
-## Tech Stack
-
-- Python
-- pandas
-- SQLite
-- matplotlib
-
----
-
-## Project Structure
-
-etl-sales/
-│
-├── data/
-├── output/
-├── src/
-├── requirements.txt
-├── README.md
-└── sales.db
-
----
-
-## Run Project
-
+# 1. Install dependencies
+```bash
 pip install -r requirements.txt
+```
 
-python src/main.py
+# 2. Download dataset
+Go to https://www.kaggle.com/datasets/vivek468/superstore-dataset-final
+Download and place as `data/raw_superstore.csv`
 
----
+# 3. Set up MySQL
+```bash
+mysql -u root -p < db_setup.sql
+```
 
-## Output
+# 4. Configure credentials
+```bash
+cp .env.example .env
+# Edit .env with your MySQL password
+```
 
-- Cleaned CSV dataset
-- SQLite database
-- Sales visualization chart
+# 5. Run the pipeline
+```bash
+python main.py
+```
 
----
 
-## Sample Analysis
 
-- Sales by category
-- Profit ratio calculations
-- Monthly order analysis
+#  ETL Steps
+
+| Step | File | What it does |
+|------|------|-------------|
+| Extract | `etl/extract.py` | Reads CSV with latin-1 encoding |
+| Transform | `etl/transform.py` | Cleans nulls, fixes types, derives new columns |
+| Load | `etl/load.py` | Loads into MySQL via SQLAlchemy |
+| Analysis | `analysis/queries.py` | Runs 6 SQL business insight queries |
+
+
+
+##  Transformations Applied
+
+- Standardized column names (lowercase, underscores)
+- Removed duplicate rows
+- Handled missing values (drop or fill)
+- Fixed date formats with `pd.to_datetime()`
+- Standardized text casing (Title Case)
+- Derived `profit_margin = profit / sales`
+- Derived `shipping_days = ship_date - order_date`
+- Filtered invalid records (negative sales, negative shipping days)
+
+
+
+#  Business Insights Generated
+
+1. Sales, Profit & Orders by Category
+2. Top 10 Most Profitable Products
+3. Monthly Sales Trend
+4. Region-wise Performance
+5. Customer Segment Analysis
+6. Loss-Making Sub-Categories
+
+
+# Tech Stack
+
+- Python 3.8+
+- Pandas — data cleaning & transformation
+- MySQL— data warehouse
+- SQLAlchemy + PyMySQL — database connector
+- python-dotenv— secure credentials management
